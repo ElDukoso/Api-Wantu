@@ -20,6 +20,10 @@ const deleteCar = async(carId) => {
     return await Car.deleteOne({ _id: carId });
 };
 
+const getCarByBrand = async() => {
+    return await Car.find({}, 'name brand model year engine transmission color countryOfOrigin description').sort({ brand: 1, year: -1 });
+}
 
 
-module.exports = {createCar, createCars, getCar, deleteCar};
+
+module.exports = {createCar, createCars, getCar, deleteCar, getCarByBrand};

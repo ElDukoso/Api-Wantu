@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { createCar, getCar, deleteCar, createCars } = require('../services/car.service');
+const { createCar, getCar, deleteCar, getCarByBrand } = require('../services/car.service');
 
 const createCarController = async (req, res = response) => {
     try {
@@ -86,4 +86,28 @@ const deleteCarController = async (req, res = response) => {
     };
 };
 
-module.exports = { createCarController, createCarsController, getCarController, deleteCarController };
+const getCarByBrandController = async (req, res = response) => {
+    try {
+        const { brand } = req.params;
+        const cars = await getCarByBrand(brand);
+        if (cars.length === 0) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se han encontrado vehículos con esa marca'
+            });
+        };
+        res.status(200).json({
+            ok: true,
+            cars
+        });
+        
+    } catch(error) {
+        console.log(error)
+        res.status(500).json({
+            ok: false,
+            msg: 'No se han encontrado vehiculos con esa marca'
+        });
+    };
+};
+
+module.exports = { createCarController, createCarsController, getCarController, deleteCarController, getCarByBrandController };

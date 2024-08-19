@@ -1,7 +1,8 @@
 const {Router} = require('express');
 const {check, param} = require('express-validator');
-const { createCarController, createCarsController, getCarController, deleteCarController } = require('../controller/car.controller');
+const { createCarController, createCarsController, getCarController, deleteCarController, getCarByBrandController } = require('../controller/car.controller');
 const validateFields = require('../middelware/validate-field');
+const { getCarByBrand } = require('../services/car.service');
 
 const router = Router();
 
@@ -38,8 +39,9 @@ router.post(
     createCarsController
 );
 
-
 router.get('/', getCarController);
+
+router.get('/brand/:brand', getCarByBrandController);
 
 router.delete(
     '/:id',

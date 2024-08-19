@@ -12,7 +12,7 @@ const validateFields = (req, res, next) => {
                 index,
                 errors: result.mapped()
             });
-        }
+        };
     });
 
     if (errors.length > 0) {

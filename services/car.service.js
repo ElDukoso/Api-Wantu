@@ -19,4 +19,12 @@ const getCarByBrand = async(brand) => {
                     .sort({ brand: 1, year: -1 });
 };
 
-module.exports = {createCar, getCar, deleteCar, getCarByBrand};
+const getCarByYear = async(year) => {
+    return await Car.find({ year: year }, 'name brand model year engine transmission color countryOfOrigin description')
+}
+
+const updateCar = async (carId, updateData) => {
+    return await Car.findByIdAndUpdate(carId, updateData, { new: true });
+};
+
+module.exports = {createCar, getCar, deleteCar, getCarByBrand, getCarByYear, updateCar};

@@ -1,5 +1,11 @@
 const { response } = require('express');
-const { createCar, getCar, deleteCar, getCarByBrand } = require('../services/car.service');
+const { createCar,
+    getCar,
+    deleteCar,
+    getCarByBrand,
+    getCarByYear,
+    updateCar
+} = require('../services/car.service');
 
 const createCarController = async (req, res = response) => {
     try {
@@ -100,9 +106,7 @@ const getCarByBrandController = async (req, res = response) => {
             ok: true,
             cars
         });
-        
-    } catch(error) {
-        console.log(error)
+    } catch {
         res.status(500).json({
             ok: false,
             msg: 'No se han encontrado vehiculos con esa marca'
@@ -110,4 +114,57 @@ const getCarByBrandController = async (req, res = response) => {
     };
 };
 
-module.exports = { createCarController, createCarsController, getCarController, deleteCarController, getCarByBrandController };
+const getCarByYearController = async (req, res = response) => {
+    try {
+        const { year } = req.params;
+        const cars = await getCarByYear(year);
+        if (cars.length === 0) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se han encontrado vehículos con ese año'
+            });
+        };
+        res.status(200).json({
+            ok: true,
+            cars
+        });
+    } catch {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se han encontrado vehiculos con ese año'
+        });
+    };
+};
+
+const updateCarController = async (req, res = response) => {
+    try {
+        const { id, ...updateData } = req.body;
+        const updatedCar = await updateCar(id, updateData);
+        if (!updatedCar) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Vehículo no encontrado'
+            });
+        }
+        res.status(200).json({
+            ok: true,
+            msg: 'Vehículo actualizado exitosamente',
+            updatedCar
+        });
+    } catch {
+        res.status(500).json({
+            ok: false,
+            msg: 'Error al actualizar el vehículo'
+        });
+    }
+};
+
+module.exports = {
+    createCarController,
+    createCarsController,
+    getCarController,
+    deleteCarController,
+    getCarByBrandController,
+    getCarByYearController,
+    updateCarController
+};

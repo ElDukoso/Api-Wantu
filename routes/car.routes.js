@@ -1,8 +1,16 @@
-const {Router} = require('express');
-const {check, param} = require('express-validator');
-const { createCarController, createCarsController, getCarController, deleteCarController, getCarByBrandController } = require('../controller/car.controller');
+const { Router } = require('express');
+const { check, param } = require('express-validator');
+const { createCarController, 
+        createCarsController, 
+        getCarController, 
+        deleteCarController, 
+        getCarByBrandController, 
+        getCarByYearController,
+        updateCarController
+       } = require('../controller/car.controller');
+
+
 const validateFields = require('../middelware/validate-field');
-const { getCarByBrand } = require('../services/car.service');
 
 const router = Router();
 
@@ -12,7 +20,7 @@ router.post(
         check('name', 'El nombre del auto es obligatorio').not().isEmpty(),
         check('brand', 'La marca es obligatoria').not().isEmpty(),
         check('model', 'El modelo es obligatorio').not().isEmpty(),
-        check('year', 'El año es obligatorio y debe ser un número válido').isInt({ min: 1886 }), 
+        check('year', 'El año es obligatorio y debe ser un número válido').isInt({ min: 1886 }),
         check('engine', 'El tipo de motor es obligatorio').not().isEmpty(),
         check('transmission', 'La transmisión es obligatoria').not().isEmpty(),
         check('color', 'El color es obligatorio').not().isEmpty(),
@@ -29,7 +37,7 @@ router.post(
         check('*.name', 'El nombre del auto es obligatorio').not().isEmpty(),
         check('*.brand', 'La marca es obligatoria').not().isEmpty(),
         check('*.model', 'El modelo es obligatorio').not().isEmpty(),
-        check('*.year', 'El año es obligatorio y debe ser un número válido').isInt({ min: 1886 }), 
+        check('*.year', 'El año es obligatorio y debe ser un número válido').isInt({ min: 1886 }),
         check('*.engine', 'El tipo de motor es obligatorio').not().isEmpty(),
         check('*.transmission', 'La transmisión es obligatoria').not().isEmpty(),
         check('*.color', 'El color es obligatorio').not().isEmpty(),
@@ -43,6 +51,8 @@ router.get('/', getCarController);
 
 router.get('/brand/:brand', getCarByBrandController);
 
+router.get('/year/:year', getCarByYearController);
+
 router.delete(
     '/:id',
     [
@@ -52,4 +62,12 @@ router.delete(
     deleteCarController
 );
 
+router.patch(
+    '/',
+    [
+        check('id', 'El ID es obligatorio para actualizar un vehículo').not().isEmpty(),
+        validateFields
+    ],
+    updateCarController
+)
 module.exports = router;

@@ -1,19 +1,12 @@
-require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const apiRoutes = require('./routes/api');
+
 const app = express();
-
-//middelwares
-
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/cars', require('./routes/car.routes'));
+// Definir rutas de API
+app.use('/api', apiRoutes);
 
-const {dbConnection} = require('./database/config');
-dbConnection();
-
-app.listen(process.env.PORT, ()=> {
-    console.log('El servidor esta corriendo en el puerto ' + process.env.PORT)
-});
-
+module.exports = app;

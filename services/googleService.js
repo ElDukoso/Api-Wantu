@@ -19,7 +19,6 @@ const googleService = {
     }
     return authClient;
   },
-
   async getDataFromSheet(spreadsheetId, range) {
     const authClient = await this.authenticate();
     const sheets = google.sheets({ version: 'v4', auth: authClient });
